@@ -21,7 +21,7 @@ public class RoomEntity {
     private int id;
     @Column(name = "Name")
     private String name;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "cateId", referencedColumnName = "Id")
     @JsonIgnoreProperties(value = "roomEntityList")
     private RoomcategoryEntity roomcategoryEntity;

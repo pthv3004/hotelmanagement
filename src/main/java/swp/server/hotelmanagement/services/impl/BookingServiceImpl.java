@@ -2,6 +2,7 @@ package swp.server.hotelmanagement.services.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import swp.server.hotelmanagement.dtos.BookingDTO;
 import swp.server.hotelmanagement.dtos.RoomDTO;
 import swp.server.hotelmanagement.entities.BookingEntity;
@@ -92,6 +93,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public BookingDTO createNewBooking(BookingDTO bookingDTO) {
         try {
             BookingEntity bookingEntity = new BookingEntity();
@@ -129,7 +131,7 @@ public class BookingServiceImpl implements BookingService {
             if (validateCheckInCheckOutDate(bookingDTO.getCheckinDate(),
                     bookingDTO.getCheckoutDate())) {
                 // checkRoom is still not rented
-                if (checkRoomIsNotRented(bookingDTO.getRoomDTOList())) {
+                if (!checkRoomIsNotRented(bookingDTO.getRoomDTOList())) {
                     return true;
                 }
             }

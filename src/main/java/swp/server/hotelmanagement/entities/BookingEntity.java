@@ -2,7 +2,6 @@ package swp.server.hotelmanagement.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,14 +22,14 @@ public class BookingEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "accountId", referencedColumnName = "Id")
     private AccountEntity accountEntity;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "booking_room",
             joinColumns = @JoinColumn(name = "booking_id"),
             inverseJoinColumns = @JoinColumn(name = "room_id"))
     @JsonIgnoreProperties("bookingEntities")
     private Set<RoomEntity> bookingDetailEntities = new HashSet<>();
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "booking_serivce",
             joinColumns = @JoinColumn(name = "booking_id"),

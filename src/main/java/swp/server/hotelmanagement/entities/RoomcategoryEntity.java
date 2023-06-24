@@ -27,7 +27,7 @@ public class RoomcategoryEntity {
     @Basic
     @Column(name = "Description", nullable = true, length = 255)
     private String description;
-    @OneToMany(mappedBy = "roomcategoryEntity", orphanRemoval = true)
+    @OneToMany(mappedBy = "roomcategoryEntity")
     private List<RoomEntity> roomEntityList;
 
 }
