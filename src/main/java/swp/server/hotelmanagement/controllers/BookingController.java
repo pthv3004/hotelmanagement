@@ -29,13 +29,12 @@ public class BookingController {
     }
 
     @PutMapping("/updateBooking")
-    public BookingDTO updateBooking(
-            @RequestBody BookingDTO bookingDTO) {
+    public BookingDTO updateBooking(@RequestBody BookingDTO bookingDTO) {
         return bookingService.updateBooking(bookingDTO);
     }
 
-    @DeleteMapping("/deleteBooking/{id}")
-    public boolean deleteBooking(@PathVariable(value = "id") int bookingId) {
-        return bookingService.deleteBooking(bookingId);
-    }
+//    @DeleteMapping("/deleteBooking/{id}")
+//    public boolean deleteBooking(@PathVariable(value = "id") int bookingId) {
+//        return bookingService.deleteBooking(bookingId);
+//    }
 }
