@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import swp.server.hotelmanagement.filters.AuthTokenFilter;
@@ -68,7 +67,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http.cors()
+                .and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
@@ -81,53 +81,51 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-                .antMatchers("/swagger-ui.html#/").permitAll()
                 .antMatchers("/hotel-server/api/v1/signIn").permitAll()
                 .antMatchers("/hotel-server/api/v1/registerAccount").permitAll()
-                .antMatchers("/hotel-server/api/v1/blogs").permitAll()
                 //permission of blog
-                .antMatchers(HttpMethod.GET, "/api/v1/blogs/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.GET, "/api/v1/blog/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.PUT, "/api/v1/blog/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.POST, "/api/v1/blog/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/blog/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/blogs/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/blog/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.PUT, "/hotel-server/api/v1/blog/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.POST, "/hotel-server/api/v1/blog/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.DELETE, "/hotel-server/api/v1/blog/**").hasAnyRole("Admin", "Staff")
                 //permission of booking
-                .antMatchers(HttpMethod.GET, "/api/v1/bookings/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.GET, "/api/v1/booking/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.PUT, "/api/v1/booking/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.POST, "/api/v1/booking/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/booking/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/bookings/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/booking/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.PUT, "/hotel-server/api/v1/booking/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.POST, "/hotel-server/api/v1/booking/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.DELETE, "/hotel-server/api/v1/booking/**").hasAnyRole("Admin", "Staff")
                 //permission of feedback
-                .antMatchers(HttpMethod.GET, "/api/v1/feedbacks/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.GET, "/api/v1/feedback/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.PUT, "/api/v1/feedback/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.POST, "/api/v1/feedback/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/feedback/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/feedbacks/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/feedback/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.PUT, "/hotel-server/api/v1/feedback/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.POST, "/hotel-server/api/v1/feedback/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.DELETE, "/hotel-server/api/v1/feedback/**").hasAnyRole("Admin", "Staff")
                 //permission of Room
-                .antMatchers(HttpMethod.GET, "/api/v1/rooms/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.GET, "/api/v1/room/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.PUT, "/api/v1/room/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.POST, "/api/v1/room/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/room/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/rooms/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/room/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.PUT, "/hotel-server/api/v1/room/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.POST, "/hotel-server/api/v1/room/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.DELETE, "/hotel-server/api/v1/room/**").hasAnyRole("Admin", "Staff")
                 //permission of Service
-                .antMatchers(HttpMethod.GET, "/api/v1/services/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.GET, "/api/v1/service/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.PUT, "/api/v1/service/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.POST, "/api/v1/service/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/service/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/services/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/service/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.PUT, "/hotel-server/api/v1/service/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.POST, "/hotel-server/api/v1/service/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.DELETE, "/hotel-server/api/v1/service/**").hasAnyRole("Admin", "Staff")
                 //permission of transaction
-                .antMatchers(HttpMethod.GET, "/api/v1/transactions/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.GET, "/api/v1/transaction/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.PUT, "/api/v1/transaction/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.POST, "/api/v1/transaction/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/transaction/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/transactions/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/transaction/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.PUT, "/hotel-server/api/v1/transaction/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.POST, "/hotel-server/api/v1/transaction/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.DELETE, "/hotel-server/api/v1/transaction/**").hasAnyRole("Admin", "Staff")
                 //permission of account
-                .antMatchers(HttpMethod.GET, "/api/v1/transactions/**").hasAnyRole("Admin", "Staff")
-                .antMatchers(HttpMethod.GET, "/api/v1/transaction/**").hasAnyRole("Admin", "Staff", "Customer")
-                .antMatchers(HttpMethod.PUT, "/api/v1/account/updateProfile").hasAnyRole("Admin", "Staff","Customer")
-                .antMatchers(HttpMethod.PUT, "/api/v1/account/changePassword/**").hasAnyRole("Admin", "Staff","Customer")
-                .antMatchers(HttpMethod.POST, "/api/v1/account/**").hasAnyRole("Admin")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/account/**").hasAnyRole("Admin")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/transactions/**").hasAnyRole("Admin", "Staff")
+                .antMatchers(HttpMethod.GET, "/hotel-server/api/v1/transaction/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.PUT, "/hotel-server/api/v1/account/updateProfile").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.PUT, "/hotel-server/api/v1/account/changePassword/**").hasAnyRole("Admin", "Staff", "Customer")
+                .antMatchers(HttpMethod.POST, "/hotel-server/api/v1/account/**").hasAnyRole("Admin")
+                .antMatchers(HttpMethod.DELETE, "/hotel-server/api/v1/account/**").hasAnyRole("Admin")
                 .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

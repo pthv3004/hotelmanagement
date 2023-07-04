@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import swp.server.hotelmanagement.entities.AccountEntity;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Data
 @AllArgsConstructor
@@ -32,7 +33,7 @@ public class AccountDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singleton(this.authority);
     }
 
     @Override

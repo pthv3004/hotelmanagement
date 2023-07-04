@@ -8,7 +8,7 @@ import swp.server.hotelmanagement.services.ServiceSer;
 import java.util.List;
 
 @RestController
-@RequestMapping("hotel-server/api/v1")
+@RequestMapping("/hotel-server/api/v1")
 @AllArgsConstructor
 public class ServiceController {
     private final ServiceSer serviceSer;

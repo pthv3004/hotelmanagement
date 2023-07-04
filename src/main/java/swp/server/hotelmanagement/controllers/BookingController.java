@@ -8,7 +8,7 @@ import swp.server.hotelmanagement.services.BookingService;
 import java.util.List;
 
 @RestController
-@RequestMapping("hotel-server/api/v1")
+@RequestMapping("/hotel-server/api/v1")
 @AllArgsConstructor
 public class BookingController {
     private final BookingService bookingService;

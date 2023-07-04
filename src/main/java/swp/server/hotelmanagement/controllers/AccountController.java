@@ -19,7 +19,7 @@ import swp.server.hotelmanagement.jwts.AccountDetails;
 import java.util.List;
 
 @RestController
-@RequestMapping("hotel-server/api/v1")
+@RequestMapping("/hotel-server/api/v1")
 @AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AccountController {

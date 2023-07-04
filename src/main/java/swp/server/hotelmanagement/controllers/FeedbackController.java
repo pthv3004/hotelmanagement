@@ -9,7 +9,7 @@ import swp.server.hotelmanagement.services.FeedbackService;
 import java.util.List;
 
 @RestController
-@RequestMapping("hotel-server/api/v1")
+@RequestMapping("/hotel-server/api/v1")
 @AllArgsConstructor
 public class FeedbackController {
     private final FeedbackService feedbackService;
