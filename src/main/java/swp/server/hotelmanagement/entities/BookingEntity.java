@@ -39,7 +39,23 @@ public class BookingEntity implements Serializable {
     @Column
     private String status;
     @Column
+    private boolean isDelete;
+    @Column
     private Timestamp checkingDate;
     @Column
     private Timestamp checkOutDate;
+    @Transient
+    private double totalPrice;
+
+    /**
+     * calculateTotalPrice when load data
+     */
+    @PostLoad
+    void calculateTotalPrice(){
+        double totalRoomPrice = bookingDetailEntities.
+                stream().mapToDouble(RoomEntity::getPrice).sum();
+        double totalServicePrice = bookingServiceDetailEntities.
+                stream().mapToDouble(ServiceEntity::getPrice).sum();
+        this.totalPrice = totalRoomPrice + totalServicePrice;
+    }
 }

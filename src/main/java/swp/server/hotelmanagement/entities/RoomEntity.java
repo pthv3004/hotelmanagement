@@ -31,7 +31,7 @@ public class RoomEntity {
     private String image;
     @Column(name = "isRent", columnDefinition = "tinyint(1) default 0")
     private boolean isRent;
-    @OneToMany(mappedBy = "roomEntity")
+    @OneToMany(mappedBy = "roomEntity", cascade = CascadeType.ALL)
     private List<FeedbackEntity> feedbackEntities;
     @ManyToMany(mappedBy = "bookingDetailEntities")
     private Set<BookingEntity> bookingEntities;

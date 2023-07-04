@@ -18,4 +18,5 @@ public class BookingDTO implements Serializable {
     private String checkoutDate;
     private List<RoomDTO> roomDTOList;
     private List<ServiceDTO> serviceDTOList;
+    private double totalPrice;
 }

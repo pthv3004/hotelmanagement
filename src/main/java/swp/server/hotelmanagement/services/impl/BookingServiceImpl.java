@@ -31,15 +31,9 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingDTO> getAllBooking() {
         List<BookingDTO> bookingDTOList = new ArrayList<>();
         try {
-            List<BookingEntity> bookingEntities = bookingRepository.findAll();
+            List<BookingEntity> bookingEntities = bookingRepository.findBookingEntities();
             bookingEntities.stream().forEach(bookingEntity -> {
-                BookingDTO bookingDTO = new BookingDTO(bookingEntity.getBookingId(),
-                        mapperUtil.mapToAccountDTO(bookingEntity.getAccountEntity()),
-                        bookingEntity.getStatus(),
-                        bookingEntity.getCheckingDate().toString(),
-                        bookingEntity.getCheckOutDate().toString(),
-                        mapperUtil.mapToListRoomDTO(bookingEntity.getBookingDetailEntities().stream().collect(Collectors.toList())),
-                        mapperUtil.mapToListServiceDTO(bookingEntity.getBookingServiceDetailEntities().stream().collect(Collectors.toList())));
+                BookingDTO bookingDTO = mapperUtil.mapBookingEntityToDTO(bookingEntity);
                 bookingDTOList.add(bookingDTO);
             });
             return bookingDTOList;
@@ -53,13 +47,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDTO getBookingById(int bookingId) {
         try {
             BookingEntity bookingEntity = bookingRepository.findById(bookingId).get();
-            BookingDTO bookingDTO = new BookingDTO(bookingEntity.getBookingId(),
-                    mapperUtil.mapToAccountDTO(bookingEntity.getAccountEntity()),
-                    bookingEntity.getStatus(),
-                    bookingEntity.getCheckingDate().toString(),
-                    bookingEntity.getCheckOutDate().toString(),
-                    mapperUtil.mapToListRoomDTO(bookingEntity.getBookingDetailEntities().stream().collect(Collectors.toList())),
-                    mapperUtil.mapToListServiceDTO(bookingEntity.getBookingServiceDetailEntities().stream().collect(Collectors.toList())));
+            BookingDTO bookingDTO = mapperUtil.mapBookingEntityToDTO(bookingEntity);
             return bookingDTO;
         } catch (Exception e) {
             e.getMessage();
@@ -82,15 +70,6 @@ public class BookingServiceImpl implements BookingService {
         return null;
     }
 
-    private BookingEntity mapBookingDtoToEntity(BookingDTO bookingDTO, BookingEntity bookingEntity) {
-        bookingEntity.setAccountEntity(accountRepository.findById(bookingDTO.getAccountId().getId()).get());
-        bookingEntity.setBookingDetailEntities(Set.copyOf(mapperUtil.mapRoomDTOsToEntities(bookingDTO.getRoomDTOList())));
-        bookingEntity.setBookingServiceDetailEntities(Set.copyOf(mapperUtil.mapToListServiceEntity(bookingDTO.getServiceDTOList())));
-        bookingEntity.setStatus(bookingDTO.getStatus());
-        bookingEntity.setCheckingDate(Timestamp.valueOf(bookingDTO.getCheckinDate()));
-        bookingEntity.setCheckOutDate(Timestamp.valueOf(bookingDTO.getCheckoutDate()));
-        return bookingEntity;
-    }
 
     @Override
     @Transactional
@@ -111,7 +90,9 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public boolean deleteBooking(int bookingId) {
         try {
-            bookingRepository.deleteById(bookingId);
+            BookingEntity bookingEntity = bookingRepository.findById(bookingId).get();
+            bookingEntity.setDelete(true);
+            bookingRepository.save(bookingEntity);
             return true;
         } catch (Exception e) {
             e.getMessage();
@@ -173,4 +154,20 @@ public class BookingServiceImpl implements BookingService {
             roomRepository.save(roomEntity);
         });
     }
+
+    /**
+     * @param bookingDTO
+     * @param bookingEntity
+     * @return Booking entity
+     */
+    private BookingEntity mapBookingDtoToEntity(BookingDTO bookingDTO, BookingEntity bookingEntity) {
+        bookingEntity.setAccountEntity(accountRepository.findById(bookingDTO.getAccountId().getId()).get());
+        bookingEntity.setBookingDetailEntities(Set.copyOf(mapperUtil.mapRoomDTOsToEntities(bookingDTO.getRoomDTOList())));
+        bookingEntity.setBookingServiceDetailEntities(Set.copyOf(mapperUtil.mapToListServiceEntity(bookingDTO.getServiceDTOList())));
+        bookingEntity.setStatus(bookingDTO.getStatus());
+        bookingEntity.setCheckingDate(Timestamp.valueOf(bookingDTO.getCheckinDate()));
+        bookingEntity.setCheckOutDate(Timestamp.valueOf(bookingDTO.getCheckoutDate()));
+        return bookingEntity;
+    }
+
 }

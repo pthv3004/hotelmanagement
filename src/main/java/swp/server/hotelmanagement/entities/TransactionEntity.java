@@ -16,10 +16,15 @@ public class TransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int transactionId;
 
+    @Column
+    private boolean isDelete;
+
     @OneToOne
     @JoinColumn(name = "bookingId")
     private BookingEntity bookingEntity;
     @OneToOne
     @JoinColumn(name = "paymentId")
     private PaymentEntity paymentEntity;
+
+
 }

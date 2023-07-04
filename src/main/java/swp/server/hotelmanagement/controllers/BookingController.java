@@ -32,9 +32,13 @@ public class BookingController {
     public BookingDTO updateBooking(@RequestBody BookingDTO bookingDTO) {
         return bookingService.updateBooking(bookingDTO);
     }
+    @PutMapping("/deleteBooking/{id}")
+    public boolean deleteBooking(@PathVariable(value = "id") int bookingId) {
+        return bookingService.deleteBooking(bookingId);
+    }
 
 //    @DeleteMapping("/deleteBooking/{id}")
 //    public boolean deleteBooking(@PathVariable(value = "id") int bookingId) {
 //        return bookingService.deleteBooking(bookingId);
-//    }
+//    };l
 }

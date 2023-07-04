@@ -1,18 +1,16 @@
 package swp.server.hotelmanagement.mappers;
 
 import org.springframework.stereotype.Service;
-import swp.server.hotelmanagement.dtos.AccountDTO;
-import swp.server.hotelmanagement.dtos.RoomCategoryDTO;
-import swp.server.hotelmanagement.dtos.RoomDTO;
-import swp.server.hotelmanagement.dtos.ServiceDTO;
-import swp.server.hotelmanagement.entities.AccountEntity;
-import swp.server.hotelmanagement.entities.RoomEntity;
-import swp.server.hotelmanagement.entities.RoomcategoryEntity;
-import swp.server.hotelmanagement.entities.ServiceEntity;
+import swp.server.hotelmanagement.dtos.*;
+import swp.server.hotelmanagement.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Use for mapper Entity with DTO
+ */
 @Service
 public class MapperUtil {
 
@@ -20,6 +18,7 @@ public class MapperUtil {
 
     /**
      * mapping AccountEntity to AccountDTO
+     *
      * @param accountEntity
      * @return accountDTO
      */
@@ -38,6 +37,7 @@ public class MapperUtil {
 
     /**
      * mapping List RoomEntity to List RoomDTO
+     *
      * @param roomEntities
      * @return roomDTOList
      */
@@ -50,6 +50,7 @@ public class MapperUtil {
 
     /**
      * mapping RoomEntity to RoomDTO
+     *
      * @param roomEntity
      * @return roomDTO
      */
@@ -66,6 +67,7 @@ public class MapperUtil {
 
     /**
      * mapping RoomCategoryEntity to RoomCategoryDTO
+     *
      * @param roomcategoryEntity
      * @return roomCategoryDTO
      */
@@ -80,6 +82,7 @@ public class MapperUtil {
 
     /**
      * mapping List ServiceEntity to List ServiceDTO
+     *
      * @param serviceEntities
      * @return serviceDTOs
      */
@@ -95,6 +98,7 @@ public class MapperUtil {
 
     /**
      * mapping RoomDTO to RoomEntity
+     *
      * @param roomDTO
      * @return RoomEntity
      */
@@ -111,6 +115,7 @@ public class MapperUtil {
 
     /**
      * mapping categoryDTO to CategoryEntity
+     *
      * @param roomCategoryDTO
      * @return roomCategoryEntity
      */
@@ -125,6 +130,7 @@ public class MapperUtil {
 
     /**
      * mapping List RoomDTO to List RoomEntity
+     *
      * @param roomDTOS
      * @return RoomEntities
      */
@@ -136,6 +142,7 @@ public class MapperUtil {
 
     /**
      * mapping ServiceDTO to  ServiceEntity
+     *
      * @param serviceDTO
      * @return ServiceEntity
      */
@@ -150,6 +157,7 @@ public class MapperUtil {
 
     /**
      * mapping List ServiceDTO to List ServiceEntity
+     *
      * @param serviceDTOS
      * @return ServiceEntities
      */
@@ -158,4 +166,47 @@ public class MapperUtil {
         serviceDTOS.stream().forEach(serviceDTO -> serviceEntities.add(mapDTOtoServiceEntity(serviceDTO)));
         return serviceEntities;
     }
+
+    /**
+     * @param bookingEntity
+     * @return BookingDTO
+     */
+    public BookingDTO mapBookingEntityToDTO(BookingEntity bookingEntity) {
+        BookingDTO bookingDTO = new BookingDTO(bookingEntity.getBookingId(),
+                mapToAccountDTO(bookingEntity.getAccountEntity()),
+                bookingEntity.getStatus(),
+                bookingEntity.getCheckingDate().toString(),
+                bookingEntity.getCheckOutDate().toString(),
+                mapToListRoomDTO(bookingEntity.getBookingDetailEntities().stream().collect(Collectors.toList())),
+                mapToListServiceDTO(bookingEntity.getBookingServiceDetailEntities().stream().collect(Collectors.toList())),
+                bookingEntity.getTotalPrice());
+        return bookingDTO;
+    }
+
+
+    /**
+     * @param paymentEntity
+     * @return PaymentDTO
+     */
+    public PaymentDTO mapPaymentEntityToDTO(PaymentEntity paymentEntity){
+        PaymentDTO paymentDTO = new PaymentDTO(paymentEntity.getPaymentId(), paymentEntity.getMethod());
+        return paymentDTO;
+    }
+    public PaymentEntity mapDtoToPaymentEntity(PaymentDTO paymentDTO){
+        PaymentEntity paymentEntity = new PaymentEntity(paymentDTO.getPaymentId(),
+                paymentDTO.getMethod());
+        return paymentEntity;
+    }
+
+    /**
+     * @param transactionEntity
+     * @return TransactionDTO
+     */
+    public TransactionDTO mapTransactionEntityToDTO(TransactionEntity transactionEntity){
+        TransactionDTO transactionDTO = new TransactionDTO(transactionEntity.getTransactionId(),
+                mapBookingEntityToDTO(transactionEntity.getBookingEntity()),
+                mapPaymentEntityToDTO(transactionEntity.getPaymentEntity()));
+        return transactionDTO;
+    }
+
 }

@@ -24,12 +24,12 @@ public class ServiceController {
     }
 
     @PostMapping("/service")
-    public ServiceDTO createNewService(ServiceDTO serviceDTO) {
+    public ServiceDTO createNewService(@RequestBody ServiceDTO serviceDTO) {
         return serviceSer.createNewService(serviceDTO);
     }
 
     @PutMapping("/updateService")
-    public ServiceDTO updateService(ServiceDTO serviceDTO) {
+    public ServiceDTO updateService(@RequestBody ServiceDTO serviceDTO) {
         return serviceSer.updateService(serviceDTO);
     }
 
