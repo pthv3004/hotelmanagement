@@ -1,12 +1,14 @@
 package swp.server.hotelmanagement.services.impl;
 
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import swp.server.hotelmanagement.dtos.AccountDTO;
 import swp.server.hotelmanagement.dtos.LoginDTO;
 import swp.server.hotelmanagement.entities.AccountEntity;
 import swp.server.hotelmanagement.entities.ProfileEntity;
+import swp.server.hotelmanagement.jwts.AccountDetails;
 import swp.server.hotelmanagement.repositories.AccountRepository;
 import swp.server.hotelmanagement.repositories.RoleRepository;
 import swp.server.hotelmanagement.services.AccountService;
@@ -194,5 +196,11 @@ public class AccountServiceImpl implements AccountService {
             e.getMessage();
             return "can't not change password";
         }
+    }
+
+    @Override
+    public AccountDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        AccountEntity accountEntity = accountRepository.findByEmail(email);
+        return AccountDetails.build(accountEntity);
     }
 }
