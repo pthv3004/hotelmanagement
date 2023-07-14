@@ -7,8 +7,8 @@ import swp.server.hotelmanagement.services.AddressService;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/hotel-server/api/v1")
+//@RestController
+//@RequestMapping("/hotel-server/api/v1")
 @AllArgsConstructor
 public class AddressController {
     private final AddressService addressService;

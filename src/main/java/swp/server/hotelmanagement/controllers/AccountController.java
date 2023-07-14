@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import swp.server.hotelmanagement.dtos.AccountDTO;
+import swp.server.hotelmanagement.dtos.AccountRequest;
 import swp.server.hotelmanagement.dtos.LoginDTO;
 import swp.server.hotelmanagement.jwts.JwtResponse;
 import swp.server.hotelmanagement.jwts.JwtUtils;
@@ -46,7 +47,7 @@ public class AccountController {
         return ResponseEntity.ok(jwtResponse);
     }
 
-    @PostMapping("/login")
+//    @PostMapping("/login")
     public AccountDTO login(@RequestBody LoginDTO loginDTO) {
         return accountService.login(loginDTO);
     }
@@ -62,7 +63,7 @@ public class AccountController {
     }
 
     @PostMapping("/registerAccount")
-    public AccountDTO register(@RequestBody AccountDTO accountDTO) {
+    public AccountRequest register(@RequestBody AccountRequest accountDTO) {
         return accountService.registerAccount(accountDTO);
 
     }

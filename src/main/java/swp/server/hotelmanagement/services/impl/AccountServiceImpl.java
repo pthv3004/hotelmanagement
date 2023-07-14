@@ -5,11 +5,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import swp.server.hotelmanagement.dtos.AccountDTO;
+import swp.server.hotelmanagement.dtos.AccountRequest;
 import swp.server.hotelmanagement.dtos.LoginDTO;
 import swp.server.hotelmanagement.entities.AccountEntity;
 import swp.server.hotelmanagement.entities.ProfileEntity;
 import swp.server.hotelmanagement.jwts.AccountDetails;
 import swp.server.hotelmanagement.repositories.AccountRepository;
+import swp.server.hotelmanagement.repositories.ProfileRepository;
 import swp.server.hotelmanagement.repositories.RoleRepository;
 import swp.server.hotelmanagement.services.AccountService;
 import swp.server.hotelmanagement.services.ProfileService;
@@ -24,11 +26,12 @@ public class AccountServiceImpl implements AccountService {
     private final RoleRepository roleRepository;
 
     private final ProfileService profileService;
-
-    public AccountServiceImpl(AccountRepository accountRepository, RoleRepository roleRepository, @Lazy ProfileService profileService) {
+    private final ProfileRepository profileRepository;
+    public AccountServiceImpl(AccountRepository accountRepository, RoleRepository roleRepository, @Lazy ProfileService profileService, ProfileRepository profileRepository) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
         this.profileService = profileService;
+        this.profileRepository = profileRepository;
     }
 
 
@@ -63,6 +66,8 @@ public class AccountServiceImpl implements AccountService {
                         accountEntity.setEmail(accountDTO.getEmail());
                         accountEntity.setPassword(accountDTO.getPassword());
                         accountEntity.setPhone(accountDTO.getPhoneNum());
+                        ProfileEntity profileEntity = profileService.profileById(profileService.createNewProfile(accountDTO));
+                        accountEntity.setProfileEntity(profileEntity);
                         accountRepository.save(accountEntity);
                         return accountDTO;
                     }
@@ -85,7 +90,7 @@ public class AccountServiceImpl implements AccountService {
             accountDTO.setLastName(accountEntity.getProfileEntity().getLastName());
             accountDTO.setSex(accountEntity.getProfileEntity().getSex());
             accountDTO.setPhoneNum(accountEntity.getPhone());
-            accountDTO.setEmail(accountEntity.getPassword());
+            accountDTO.setEmail(accountEntity.getEmail());
             accountDTO.setAvatar(accountEntity.getProfileEntity().getAvatar());
             accountDTO.setRoleId(accountEntity.getRoleEntity().getId());
             accountDTO.setPassword(accountEntity.getPassword());
@@ -160,7 +165,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO registerAccount(AccountDTO accountDTO) {
+    public AccountRequest registerAccount(AccountRequest accountDTO) {
         try {
             AccountEntity newAccountEntity = new AccountEntity();
             if (accountDTO.getEmail().isEmpty() == false) {
@@ -172,8 +177,14 @@ public class AccountServiceImpl implements AccountService {
                         newAccountEntity.setPassword(accountDTO.getPassword());
                         // default role is customer
                         newAccountEntity.setRoleEntity(roleRepository.getOne(3));
-                        ProfileEntity profileEntity = profileService.profileById(profileService.createNewProfile(accountDTO));
-                        newAccountEntity.setProfileEntity(profileEntity);
+                        ProfileEntity newProfileEntity = new ProfileEntity();
+                        newProfileEntity.setSex(accountDTO.getSex());
+                        newProfileEntity.setFirstName(accountDTO.getFirstName());
+                        newProfileEntity.setLastName(accountDTO.getLastName());
+                        newProfileEntity.setAvatar(accountDTO.getAvatar());
+                        newProfileEntity.setAddress(accountDTO.getAddress());
+                        ProfileEntity savedProfileEntity = profileRepository.saveAndFlush(newProfileEntity);
+                        newAccountEntity.setProfileEntity(savedProfileEntity);
                         accountRepository.save(newAccountEntity);
                         return accountDTO;
                     }
