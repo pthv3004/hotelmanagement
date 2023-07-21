@@ -22,16 +22,15 @@ public class AccountControllerTest {
     @Mock
     AccountService accountService;
 
-    @Test
-    public void loginTest() {
-        LoginDTO loginDTO = new LoginDTO("abc@gmail.com", "123123");
-        AccountDTO accountDTO = new AccountDTO(1, "www", "ccc", "abc@gmail.com"
-                , null, "aaa", "Female", "12345622",
-                "DT", 3);
-        when(accountService.login(loginDTO)).thenReturn(accountDTO);
-        assertThat(accountController.login(loginDTO)).isEqualTo(accountDTO);
-        assertThat(accountController.login(loginDTO).getFirstName()).isEqualTo("www");
-    }
+//    public void loginTest() {
+//        LoginDTO loginDTO = new LoginDTO("abc@gmail.com", "123123");
+//        AccountDTO accountDTO = new AccountDTO(1, "www", "ccc", "abc@gmail.com"
+//                , null, "aaa", "Female", "12345622",
+//                "DT", 3);
+//        when(accountService.login(loginDTO)).thenReturn(accountDTO);
+//        assertThat(accountController.login(loginDTO)).isEqualTo(accountDTO);
+//        assertThat(accountController.login(loginDTO).getFirstName()).isEqualTo("www");
+//    }
 
     @Test
     public void getAllAccountsTest() {

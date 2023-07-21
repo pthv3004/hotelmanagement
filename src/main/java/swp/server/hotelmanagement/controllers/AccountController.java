@@ -48,9 +48,9 @@ public class AccountController {
     }
 
 //    @PostMapping("/login")
-    public AccountDTO login(@RequestBody LoginDTO loginDTO) {
-        return accountService.login(loginDTO);
-    }
+//    public AccountDTO login(@RequestBody LoginDTO loginDTO) {
+//        return accountService.login(loginDTO);
+//    }
 
     @GetMapping("/accounts")
     public List<AccountDTO> getAllAccounts() {
@@ -85,7 +85,7 @@ public class AccountController {
     }
 
     @PutMapping("/account/updateProfile")
-    public AccountDTO updateAccount(AccountDTO accountDTO) {
+    public AccountDTO updateProfile(@RequestBody AccountDTO accountDTO) {
         return profileService.updateProfile(accountDTO);
     }
 

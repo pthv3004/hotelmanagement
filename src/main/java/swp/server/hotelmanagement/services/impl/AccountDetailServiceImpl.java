@@ -9,15 +9,28 @@ import org.springframework.stereotype.Service;
 import swp.server.hotelmanagement.entities.AccountEntity;
 import swp.server.hotelmanagement.jwts.AccountDetails;
 import swp.server.hotelmanagement.repositories.AccountRepository;
+
 @Service
 public class AccountDetailServiceImpl implements UserDetailsService {
     @Autowired
     private AccountRepository accountRepository;
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        AccountEntity accountEntity = accountRepository.findByEmail(s);
-        accountEntity.setPassword(new BCryptPasswordEncoder().encode(accountEntity.getPassword()));
-        return AccountDetails.build(accountEntity);
+        try {
+            AccountEntity accountEntity = accountRepository.findByEmail(s);
+            if (accountEntity != null) {
+                accountEntity.setPassword(new BCryptPasswordEncoder().encode(accountEntity.getPassword()));
+                return AccountDetails.build(accountEntity);
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
+
 
 }

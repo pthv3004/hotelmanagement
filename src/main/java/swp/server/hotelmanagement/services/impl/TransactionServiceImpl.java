@@ -3,10 +3,12 @@ package swp.server.hotelmanagement.services.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import swp.server.hotelmanagement.dtos.TransactionDTO;
+import swp.server.hotelmanagement.entities.BookingEntity;
 import swp.server.hotelmanagement.entities.TransactionEntity;
 import swp.server.hotelmanagement.mappers.MapperUtil;
 import swp.server.hotelmanagement.repositories.BookingRepository;
 import swp.server.hotelmanagement.repositories.PaymentRepository;
+import swp.server.hotelmanagement.repositories.RoomRepository;
 import swp.server.hotelmanagement.repositories.TransactionRepository;
 import swp.server.hotelmanagement.services.TransactionService;
 
@@ -20,6 +22,7 @@ public class TransactionServiceImpl implements TransactionService {
     private PaymentRepository paymentRepository;
     private MapperUtil mapperUtil;
     private BookingRepository bookingRepository;
+    private RoomRepository roomRepository;
 
     @Override
     public List<TransactionDTO> getAllTransaction() {
@@ -56,6 +59,15 @@ public class TransactionServiceImpl implements TransactionService {
             transactionEntity.setPaymentEntity(mapperUtil.mapDtoToPaymentEntity(transactionDTO.getPaymentDTO()));
             transactionEntity.setDelete(false);
             transactionRepository.save(transactionEntity);
+            //change status of booking
+            BookingEntity bookingEntity = bookingRepository.getOne(transactionDTO.getBookingDTO().getBookingId());
+            bookingEntity.setStatus("Done");
+            bookingRepository.save(bookingEntity);
+            //change status of room after check-out
+            transactionDTO.getBookingDTO().getRoomDTOList().forEach(room -> {
+                room.setRent(false);
+                roomRepository.save(mapperUtil.mapRoomDTOToEntity(room));
+            });
             return transactionDTO;
         } catch (Exception e) {
             e.getMessage();

@@ -25,7 +25,7 @@ public class BlogController {
     }
 
     @PostMapping("/blog")
-    public BlogRequest createNewBlog(BlogRequest blogRequest) {
+    public BlogRequest createNewBlog(@RequestBody BlogRequest blogRequest) {
         return blogService.createNewBlog(blogRequest);
     }
 

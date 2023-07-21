@@ -24,7 +24,7 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public TransactionDTO createNewBlog(@RequestBody TransactionDTO transactionDTO) {
+    public TransactionDTO checkOut(@RequestBody TransactionDTO transactionDTO) {
         return transactionService.createNewTransaction(transactionDTO);
     }
 

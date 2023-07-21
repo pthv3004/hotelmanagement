@@ -15,8 +15,6 @@ import swp.server.hotelmanagement.services.ProfileService;
 @AllArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
-    private final AccountService accountService;
-    private final RoleRepository roleRepository;
     private final AccountRepository accountRepository;
     @Override
     public ProfileEntity profileById(int accountId) {
@@ -53,11 +51,22 @@ public class ProfileServiceImpl implements ProfileService {
     public AccountDTO updateProfile(AccountDTO accountDTO) {
         try{
             ProfileEntity profileEntity = accountRepository.findByEmail(accountDTO.getEmail()).getProfileEntity();
-            profileEntity.setAvatar(accountDTO.getAvatar());
-            profileEntity.setFirstName(accountDTO.getFirstName());
-            profileEntity.setLastName(accountDTO.getFirstName());
-            profileEntity.setSex(accountDTO.getSex());
-            profileEntity.setAddress(accountDTO.getAddress());
+
+            if(accountDTO.getAvatar() != null && !accountDTO.getAvatar().isEmpty()){
+                profileEntity.setAvatar(accountDTO.getAvatar());
+            }
+            if(accountDTO.getFirstName() != null && !accountDTO.getFirstName().isEmpty()){
+                profileEntity.setFirstName(accountDTO.getFirstName());
+            }
+            if(accountDTO.getLastName() != null && !accountDTO.getFirstName().isEmpty()){
+                profileEntity.setLastName(accountDTO.getLastName());
+            }
+            if(accountDTO.getSex() != null && !accountDTO.getSex().isEmpty()){
+                profileEntity.setSex(accountDTO.getSex());
+            }
+            if(accountDTO.getAddress() != null && !accountDTO.getAddress().isEmpty()){
+                profileEntity.setAddress(accountDTO.getAddress());
+            }
             profileRepository.save(profileEntity);
             return accountDTO;
         }catch (Exception e){
