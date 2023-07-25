@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static swp.server.hotelmanagement.services.impl.ProfileServiceImpl.getAccountDTO;
+
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -134,23 +136,7 @@ public class AccountServiceImpl implements AccountService {
             if(updateAccountDTO.getRoleId() != 0){
                 accountEntity.setRoleEntity(roleRepository.getOne(updateAccountDTO.getRoleId()));
             }
-            if(updateAccountDTO.getAvatar() != null && !updateAccountDTO.getAvatar().isEmpty()){
-                accountEntity.getProfileEntity().setAvatar(updateAccountDTO.getAvatar());
-            }
-            if(updateAccountDTO.getFirstName() != null && !updateAccountDTO.getFirstName().isEmpty()){
-                accountEntity.getProfileEntity().setFirstName(updateAccountDTO.getFirstName());
-            }
-            if(updateAccountDTO.getLastName() != null && !updateAccountDTO.getFirstName().isEmpty()){
-                accountEntity.getProfileEntity().setLastName(updateAccountDTO.getLastName());
-            }
-            if(updateAccountDTO.getSex() != null && !updateAccountDTO.getSex().isEmpty()){
-                accountEntity.getProfileEntity().setSex(updateAccountDTO.getSex());
-            }
-            if(updateAccountDTO.getAddress() != null && !updateAccountDTO.getAddress().isEmpty()){
-                accountEntity.getProfileEntity().setAddress(updateAccountDTO.getAddress());
-            }
-            accountRepository.save(accountEntity);
-            return updateAccountDTO;
+            return getAccountDTO(updateAccountDTO, accountEntity, accountRepository);
         } catch (Exception e) {
             e.getMessage();
         }

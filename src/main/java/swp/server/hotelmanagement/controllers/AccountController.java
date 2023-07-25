@@ -84,9 +84,9 @@ public class AccountController {
         return accountService.updateAccount(accountId, updatedAccountDTO);
     }
 
-    @PutMapping("/account/updateProfile")
-    public AccountDTO updateProfile(@RequestBody AccountDTO accountDTO) {
-        return profileService.updateProfile(accountDTO);
+    @PutMapping("/account/updateProfile/{id}")
+    public AccountDTO updateProfile(@PathVariable(value = "id") int accountId,@RequestBody AccountDTO accountDTO) {
+        return profileService.updateProfile(accountId,accountDTO);
     }
 
     @DeleteMapping("/account/{id}")

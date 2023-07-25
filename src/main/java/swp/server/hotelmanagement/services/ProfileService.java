@@ -5,6 +5,6 @@ import swp.server.hotelmanagement.entities.ProfileEntity;
 public interface ProfileService {
     ProfileEntity profileById(int accountId);
     int createNewProfile(AccountDTO accountDTO);
-    AccountDTO updateProfile(AccountDTO accountDTO);
+    AccountDTO updateProfile(int accountId,AccountDTO accountDTO);
     Boolean deleteProfile(int accountId);
 }

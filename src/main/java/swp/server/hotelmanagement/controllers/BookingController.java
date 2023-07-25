@@ -22,6 +22,10 @@ public class BookingController {
     public BookingDTO getBookingById(@PathVariable(value = "id") int bookingId) {
         return bookingService.getBookingById(bookingId);
     }
+    @GetMapping("/bookingByAccount/{accountId}")
+    public List<BookingDTO> bookingByAccount(@PathVariable(value = "accountId") int accountId) {
+        return bookingService.getBookingByAccount(accountId);
+    }
 
     @PostMapping("/booking")
     public BookingDTO createNewBlog(@RequestBody BookingDTO bookingDTO) {

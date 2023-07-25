@@ -88,6 +88,23 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<BookingDTO> getBookingByAccount(int accountId) {
+
+        List<BookingDTO> bookingDTOList = new ArrayList<>();
+        try {
+            List<BookingEntity> bookingEntities = bookingRepository.getBookingByAccountEntity(accountId);
+            bookingEntities.stream().forEach(bookingEntity -> {
+                BookingDTO bookingDTO = mapperUtil.mapBookingEntityToDTO(bookingEntity);
+                bookingDTOList.add(bookingDTO);
+            });
+            return bookingDTOList;
+        } catch (Exception e) {
+            e.getMessage();
+            return bookingDTOList;
+        }
+    }
+
+    @Override
     public boolean deleteBooking(int bookingId) {
         try {
             BookingEntity bookingEntity = bookingRepository.findById(bookingId).get();
